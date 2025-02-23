@@ -28,10 +28,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - run: docker build -t lewiselliotphoto .
-      - run: docker run -v "$(pwd)/build:/app/build/" lewiselliotphoto
+      - name: Download content from Google Drive
+        env:
+          SERVICE_ACCOUNT_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT_CREDENTIALS }}
+        run: |
+          cd google/
+          python -m pip install requirements.txt
+          echo $SERVICE_ACCOUNT_CREDENTIALS > credentials.json
+          python download_content.py --output-dir ../lewiselliotphoto/src/content 
+      - name: Build the site
+        run: |
+          docker build -t lewiselliotphoto .
+          docker run -v "$(pwd)/build:/app/build/" lewiselliotphoto
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
