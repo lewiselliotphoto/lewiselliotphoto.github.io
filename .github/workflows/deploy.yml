@@ -39,7 +39,7 @@ jobs:
           SERVICE_ACCOUNT_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT_CREDENTIALS }}
         run: |
           cd google/
-          python -m pip install requirements.txt
+          python -m pip install -r requirements.txt
           echo $SERVICE_ACCOUNT_CREDENTIALS > credentials.json
           python download_content.py --output-dir ../lewiselliotphoto/src/content 
       - name: Build the site
