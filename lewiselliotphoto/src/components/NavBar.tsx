@@ -5,15 +5,17 @@ import './navBar.css'
 
 const NavBar = () => {
 
-    const [menuOpen, setMenuOpen] = useState<boolean>(false);
-    const [hidden, setHidden] = useState<boolean>(false);
-    const [lastScrollPos, setLastScrollPos] = useState<number>(0);
-
     const minScrollToHide = 100;
-    const minScrollDeltaToTriggerShow = 2;
-    const minScrollDeltaToTriggerHide = 5;
-
     const mobileModeWidth = 500;
+    const maxNavBarMarginDesktop = 100;
+    const maxNavBarMarginMobile = 50;
+
+    const [menuOpen, setMenuOpen] = useState<boolean>(false);
+    const [lastScrollPos, setLastScrollPos] = useState<number>(0);
+    const [navBarMargin, setNavBarMargin] = useState<number>(0);
+    const [scrollStartPos, setScrollStartPos] = useState<number | null>(null);
+    const [navBarMarginStart, setNavBarMarginStart] = useState<number | null>(null);
+    const [maxNavBarMargin, setMaxNavBarMargin] = useState<number>(100);
 
     // Hide/show based on scroll state
     useEffect(() => {
@@ -22,21 +24,26 @@ const NavBar = () => {
 
             const currentScrollPos = window.scrollY;
 
-            if (currentScrollPos < minScrollToHide)
+            // If not currently scrolling the navbar, and now scrolling up, then start scrolling the navbar
+            if ((scrollStartPos === null || navBarMarginStart === null) && currentScrollPos > minScrollToHide)
             {
-                setHidden(false);
+                setScrollStartPos(currentScrollPos);
+                setNavBarMarginStart(navBarMargin);
             }
-            else
-            {
-                const shouldHide = (lastScrollPos < currentScrollPos);
-                const scrollDelta = Math.abs(lastScrollPos - currentScrollPos);
-                
-                if (shouldHide && scrollDelta > minScrollDeltaToTriggerHide) {
-                    setHidden(true);
+
+            // Scrolling the navbar
+            if (scrollStartPos !== null && navBarMarginStart !== null) {
+                let margin = navBarMarginStart + scrollStartPos - currentScrollPos;
+                if (margin <= -maxNavBarMargin) {
+                    margin = -maxNavBarMargin;
+                    setScrollStartPos(null);
                 }
-                else if (!shouldHide && scrollDelta > minScrollDeltaToTriggerShow) {
-                    setHidden(false);
+                else if (margin >= 0) {
+                    margin = 0;
+                    setScrollStartPos(null);
                 }
+
+                setNavBarMargin(margin);
             }
             
             setLastScrollPos(currentScrollPos);
@@ -46,14 +53,19 @@ const NavBar = () => {
         window.addEventListener('scroll', onScroll, { passive: true });
         
         return () => window.removeEventListener('scroll', onScroll);
-    }, [lastScrollPos]);
+    }, [lastScrollPos, scrollStartPos, navBarMarginStart, maxNavBarMargin]);
     
     // Close nav menu if window is resized to be large
     useEffect(() => {
 
         const onResize = () => {
+
             if (window.innerWidth > mobileModeWidth) {
                 setMenuOpen(false);
+                setMaxNavBarMargin(maxNavBarMarginDesktop);
+            }
+            else {
+                setMaxNavBarMargin(maxNavBarMarginMobile);
             }
         };
 
@@ -63,6 +75,18 @@ const NavBar = () => {
         return () => window.removeEventListener('resize', onResize);
 
     });
+
+
+    useEffect(() => {
+
+        if (menuOpen) {
+            document.body.classList.add("menuOpen");
+        }
+        else {
+            document.body.classList.remove("menuOpen");
+        }
+
+    }, [menuOpen]);
 
 
     const links = [
@@ -89,7 +113,9 @@ const NavBar = () => {
         <>
             <nav
                 id="navBar"
-                className={hidden ? "hidden" : ""}
+                style={{
+                    marginTop: navBarMargin
+                }}
             >
                 <div
                     id="navBarContainer"
