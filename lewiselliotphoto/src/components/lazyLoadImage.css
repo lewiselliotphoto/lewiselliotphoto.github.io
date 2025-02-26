@@ -1,0 +1,15 @@
+@keyframes imageLoading {
+    from {
+        opacity: 0.9;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.loading {
+    animation-name: imageLoading;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}

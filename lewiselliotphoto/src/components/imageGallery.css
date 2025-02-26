@@ -1,0 +1,31 @@
+:root {
+    --image-gallery-gap: 5px;
+}
+
+.imageGallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    align-content: flex-start;
+    gap: var(--image-gallery-gap);
+}
+
+.imageGalleryPhoto {
+    width: calc(50% - 0.5 * var(--image-gallery-gap));
+}
+
+.imageGalleryDescription {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-style: italic;
+    text-align: center;
+}
+
+@media only screen and (max-width: 500px) {
+
+    .imageGalleryPhoto {
+        width: 100%;
+    }
+}

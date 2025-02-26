@@ -53,7 +53,7 @@ const NavBar = () => {
         window.addEventListener('scroll', onScroll, { passive: true });
         
         return () => window.removeEventListener('scroll', onScroll);
-    }, [lastScrollPos, scrollStartPos, navBarMarginStart, maxNavBarMargin]);
+    }, [lastScrollPos, scrollStartPos, navBarMarginStart, maxNavBarMargin, navBarMargin]);
     
     // Close nav menu if window is resized to be large
     useEffect(() => {
@@ -114,7 +114,8 @@ const NavBar = () => {
             <nav
                 id="navBar"
                 style={{
-                    marginTop: navBarMargin
+                    marginTop: navBarMargin,
+                    zIndex: 999
                 }}
             >
                 <div
@@ -153,6 +154,9 @@ const NavBar = () => {
             <div
                 id="navMenu"
                 className={menuOpen ? "open" : ""}
+                style={{
+                    zIndex: 1000
+                }}
             >
                 <div
                     id="navMenuBar"
