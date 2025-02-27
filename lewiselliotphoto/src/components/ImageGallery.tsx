@@ -1,14 +1,7 @@
 import LazyLoadImage from "./LazyLoadImage";
+import ImageData from "./imageData";
 
 import './imageGallery.css'
-
-interface ImageData {
-    file_id: string;
-    extension: string;
-    description: string;
-    width: number;
-    height: number;
-}
 
 interface ImageGalleryProps {
     images: ImageData[];
@@ -28,7 +21,7 @@ const ImageGallery = (
                 images.map((photoData, index) => (
                     <div
                         key={`photo${index}`}
-                        className="imageGalleryPhoto"
+                        className={"imageGalleryPhoto"}
                     >
                         <LazyLoadImage
                             preview={`${photoData.file_id}.preview.${photoData.extension}`}

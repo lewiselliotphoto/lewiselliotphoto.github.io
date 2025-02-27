@@ -550,11 +550,13 @@ def _get_portfolio_content(items: dict[str, DriveItemInfo]) -> dict:
         if item.item_type != DriveItemType.DIRECTORY:
             continue
 
-        album_name = item.name
+        album_name = item.description.strip()
+        if not album_name:
+            album_name = item.name
 
         album_items = [
             items[item_id]
-            for item_id in _get_items_in_dir(items, ['portfolio', album_name])
+            for item_id in _get_items_in_dir(items, ['portfolio', item.name])
         ]
 
         photos[album_name] = [

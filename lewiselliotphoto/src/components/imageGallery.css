@@ -6,7 +6,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
     align-content: flex-start;
     gap: var(--image-gallery-gap);
 }
@@ -22,6 +22,7 @@
     font-style: italic;
     text-align: center;
 }
+
 
 @media only screen and (max-width: 500px) {
 

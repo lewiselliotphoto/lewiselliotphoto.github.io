@@ -13,3 +13,7 @@
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
+
+.adjustOnHover:hover {
+    opacity: 0.9;
+}

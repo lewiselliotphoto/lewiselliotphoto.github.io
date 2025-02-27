@@ -17,3 +17,17 @@ body {
 body.menuOpen {
   overflow: hidden;
 }
+
+h1, h2, h3 {
+  width: 100%;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+hr {
+  width: 90%;
+  border: 0;
+  border-top: #313133 solid 1px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
