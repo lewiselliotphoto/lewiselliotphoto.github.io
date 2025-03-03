@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.0"
+   width="320pt"
+   height="320pt"
+   viewBox="0 0 320 320"
+   preserveAspectRatio="xMidYMid"
+   id="svg41"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs41" />
+  <ellipse
+     style="display:none;fill:#313133;fill-opacity:1;stroke:none;stroke-width:0.758;stroke-dasharray:none;stroke-opacity:1"
+     id="path42"
+     cx="160"
+     cy="160"
+     rx="151.0428"
+     ry="151.21844" />
+  <g
+     id="g42"
+     style="display:inline"
+     transform="translate(-18.646904,0.50000381)">
+    <rect
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.568922;stroke-dasharray:none;stroke-opacity:1"
+       id="rect42-9"
+       width="130"
+       height="25"
+       x="187.18336"
+       y="13.409184"
+       rx="7.2222223"
+       ry="10"
+       transform="rotate(45)" />
+    <rect
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.568922;stroke-dasharray:none;stroke-opacity:1"
+       id="rect42-9-9"
+       width="130"
+       height="25"
+       x="-38.383698"
+       y="187.15788"
+       rx="7.2222223"
+       ry="10"
+       transform="rotate(-45)" />
+  </g>
+</svg>

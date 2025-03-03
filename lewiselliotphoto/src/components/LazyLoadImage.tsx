@@ -8,7 +8,9 @@ interface LazyLoadImageProps {
     large: string; ///< A large version of the image, for full-screen view
     description: string; ///< A description to use as alt text
     style: object; ///< The styling parameters
-    maxMediumSize?: number; ///< The size above which the large version of the image should be used  
+    maxMediumSize?: number; ///< The size above which the large version of the image should be used
+    currentIndex?: number; ///< The (optional) current index of a parent slideshow  
+    onMediumLoaded?: () => void; ///< Callback function when the medium image is loaded
 }
 
 
@@ -20,6 +22,8 @@ const LazyLoadImage = (
         description,
         style,
         maxMediumSize = 640,
+        currentIndex = 0,
+        onMediumLoaded = undefined
     }: LazyLoadImageProps
 ) => {
 
@@ -42,6 +46,14 @@ const LazyLoadImage = (
     const [mediumActive, setMediumActive] = useState<boolean>(false);
     const [largeActive, setLargeActive] = useState<boolean>(false);
 
+
+    const setMediumActiveWithCallback = () => {
+        setMediumActive(true);
+
+        if (onMediumLoaded) {
+            onMediumLoaded();
+        }
+    };
 
     // Update the dimensions when the element is resized
     useEffect(() => {
@@ -66,16 +78,17 @@ const LazyLoadImage = (
     
         const observer = new ResizeObserver(onResize);
         observer.observe(ref.current);
+        onResize();
         
         return () => observer.disconnect();
 
-    }, [ref]);
+    }, [ref, currentIndex]);
 
     // Set visibility state in the viewport
     useEffect(() => {
 
         const onViewportChanged = () => {
-        
+
             // Once in the viewport the images should keep loading even if now out of the viewport
             if (inViewport) {
                 return;
@@ -90,10 +103,10 @@ const LazyLoadImage = (
             const windowHeight = window.innerHeight || document.documentElement.clientHeight;
             const windowWidth = window.innerWidth || document.documentElement.clientWidth;
             setInViewport(
-                boundingRect.top >= -dimensions.width - loadMargin &&
-                boundingRect.left >= -dimensions.height - loadMargin &&
-                boundingRect.bottom <= windowHeight + dimensions.height + loadMargin &&
-                boundingRect.right <= windowWidth + dimensions.width + loadMargin
+                boundingRect.top >= -2*dimensions.width - loadMargin &&
+                boundingRect.left >= -2*dimensions.height - loadMargin &&
+                boundingRect.bottom <= windowHeight + 2*dimensions.height + loadMargin &&
+                boundingRect.right <= windowWidth + 2*dimensions.width + loadMargin
             );
         };
 
@@ -108,7 +121,7 @@ const LazyLoadImage = (
             window.removeEventListener('resize', onViewportChanged);
         }
 
-    }, [dimensions, inViewport, ref]);
+    }, [dimensions, inViewport, ref, currentIndex]);
 
     useEffect(() => {
 
@@ -177,6 +190,7 @@ const LazyLoadImage = (
                     opacity: active ? 1 : 0,
                     transition: 'opacity 1s',
                     objectFit: 'cover',
+                    userSelect: 'none'
                 }}
             />
         )
@@ -185,7 +199,6 @@ const LazyLoadImage = (
     return (
         <div
             ref={ref}
-            className="adjustOnHover"
             style={(() => {
                 let theStyle: any = {
                     ...style,
@@ -205,7 +218,7 @@ const LazyLoadImage = (
             })()}
         >
             {previewImage && makeImage(previewImage, 0, previewActive, setPreviewActive, 'loading')}
-            {mediumImage && makeImage(mediumImage, 1, mediumActive, setMediumActive)}
+            {mediumImage && makeImage(mediumImage, 1, mediumActive, setMediumActiveWithCallback)}
             {largeImage && makeImage(largeImage, 2, largeActive, setLargeActive)}
         </div>
     )
