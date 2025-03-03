@@ -22,7 +22,7 @@ const ImageSlideshow = (
 ) => {
    
     const pollIntervalMs = 1000;
-    const pauseTimeMs = 10000;
+    const pauseTimeMs = 5000;
 
     const ref = useRef<HTMLDivElement | null>(null);
     const [dimensions, setDimensions] = useState({
@@ -151,6 +151,7 @@ const ImageSlideshow = (
                                 }}
                                 style={
                                     (() => {
+                                        /*
                                         var width, height;
                                         if (photoData.width / dimensions.width > photoData.height / dimensions.height) {
                                             width = dimensions.width;
@@ -165,6 +166,11 @@ const ImageSlideshow = (
                                             height: height,
                                             marginLeft: Math.max(0, (dimensions.width - width) / 2),
                                         };
+                                        */
+                                       return {
+                                            width: dimensions.width,
+                                            height: dimensions.height
+                                       }
                                     })()
                                 }
                                 />
