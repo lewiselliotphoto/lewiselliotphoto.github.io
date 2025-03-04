@@ -23,7 +23,7 @@ const LazyLoadImage = (
         description,
         style,
         focus = [0.5, 0.5],
-        maxMediumSize = 640,
+        maxMediumSize = 300,
         currentIndex = 0,
         onMediumLoaded = undefined
     }: LazyLoadImageProps
