@@ -4,6 +4,7 @@ interface ImageData {
     description: string;
     width: number;
     height: number;
+    focus?: number[];
 }
 
 export default ImageData;

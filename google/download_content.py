@@ -90,6 +90,33 @@ class DriveItemInfo:
 
 
 @dataclass
+class Comment:
+    """
+    A comment on a file stored on google drive
+    """
+
+    item_id: str
+    """
+    The ID of the item to which the comment relates
+    """
+
+    comment_id: str
+    """
+    The ID of the comment
+    """
+
+    anchor: str
+    """
+    Where the comment is located in the file
+    """
+
+    content: str
+    """
+    The content of the comment
+    """
+
+
+@dataclass
 class CommandLineArguments:
     """
     Command-line arguments
@@ -236,6 +263,57 @@ def _get_drive_items(service) -> dict[str, DriveItemInfo]:
             description=description,
             metadata=metadata
         )
+
+    return result
+
+
+def _get_comments(service,
+                  item_id: str) -> list[Comment]:
+    """
+    Gets the comments on the supplied item
+
+    :param service: the drive service
+    :param item_id: the ID of the item from which comments should be retrieved
+
+    :return: the comments
+    """
+    
+    comments = []
+    nextPageToken = None
+
+    fields = [
+        'id',
+        'content',
+        'anchor',
+    ]
+
+    while True:
+
+        results = (
+            service.comments()
+            .list(fileId=item_id,
+                  pageSize=10,
+                  fields=f"nextPageToken, comments({','.join(fields)})",
+                  pageToken=nextPageToken)
+            .execute()
+        )
+
+        nextPageToken = results.get("nextPageToken", None)
+
+        comments += results.get("comments", [])
+
+        if nextPageToken is None:
+            break
+
+
+    result = []
+    for comment in comments:
+        result.append(Comment(
+            item_id=item_id,
+            comment_id=comment['id'],
+            anchor=comment['anchor'] if 'anchor' in comment else '',
+            content=comment['content']
+        ))
 
     return result
 
@@ -453,6 +531,36 @@ def _download_media(service,
     return file_path
 
 
+def _add_focus_points(service,
+                      photos: list):
+    """
+    Looks for a comment on the supplied photos, and adds the position of the comment as the "focal point" of the image
+
+    :param service: the service
+    :param photos: the list of photo data  
+    """
+
+    for photo in photos:
+        photo_id = photo['file_id']
+        comments = _get_comments(service, photo_id)
+        for comment in comments:
+            if comment.content.strip().lower() != 'focus':
+                continue
+
+            if not comment.anchor:
+                continue
+
+            # Anchors have the form:
+            # [null,[null,[0.3835125448028674,0.10618279569892473,0.4829749103942652,0.24193548387096775]],null,"0BwUS5sqIvorgNUJqbXowdXV0Z0UwYVY1S3B3VkE1ekdXYzZ3PQ"
+            anchor = json.loads(comment.anchor)
+            print(photo['name'], anchor[1][1])
+            x_lower, y_lower, x_upper, y_upper = anchor[1][1]
+
+            focus_x = (x_lower + x_upper) / 2
+            focus_y = (y_lower + y_upper) / 2
+
+            photo['focus'] = [focus_x, focus_y]
+
 def _get_contact_details(service,
                          items: dict[str, DriveItemInfo]) -> dict:
     """
@@ -527,6 +635,8 @@ def _get_home_content(service,
         ]
         if photo_info.item_type == DriveItemType.IMAGE
     ]
+
+    _add_focus_points(service, result['photos'])
 
     return result
 

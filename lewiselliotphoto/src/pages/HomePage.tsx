@@ -10,8 +10,9 @@ const HomePage = () => {
         autoScroll={true}
         hasControls={false}
         style={{
-          width: '100%',
-          height: 'calc(100vh - 140px)',
+          width: '100vw',
+          height: 'calc(100vh - 100px)',
+          minHeight: 'calc(100vw * 1 / 2.39)',
           maxHeight: 'calc(100vw * 9 / 16)'
         }}
       />

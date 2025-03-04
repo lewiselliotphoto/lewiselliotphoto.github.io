@@ -8,6 +8,7 @@ interface LazyLoadImageProps {
     large: string; ///< A large version of the image, for full-screen view
     description: string; ///< A description to use as alt text
     style: object; ///< The styling parameters
+    focus?: [number, number]; /// The x & y fractional position at which the image should be focused
     maxMediumSize?: number; ///< The size above which the large version of the image should be used
     currentIndex?: number; ///< The (optional) current index of a parent slideshow  
     onMediumLoaded?: () => void; ///< Callback function when the medium image is loaded
@@ -21,6 +22,7 @@ const LazyLoadImage = (
         large,
         description,
         style,
+        focus = [0.5, 0.5],
         maxMediumSize = 640,
         currentIndex = 0,
         onMediumLoaded = undefined
@@ -190,7 +192,8 @@ const LazyLoadImage = (
                     opacity: active ? 1 : 0,
                     transition: 'opacity 1s',
                     objectFit: 'cover',
-                    userSelect: 'none'
+                    userSelect: 'none',
+                    objectPosition: `${100 * focus[0]}% ${100 * focus[1]}%`
                 }}
             />
         )

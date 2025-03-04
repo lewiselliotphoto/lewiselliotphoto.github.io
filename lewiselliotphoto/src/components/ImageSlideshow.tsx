@@ -145,35 +145,16 @@ const ImageSlideshow = (
                                 medium={`${photoData.file_id}.medium.${photoData.extension}`}
                                 large={`${photoData.file_id}.large.${photoData.extension}`}
                                 description={photoData.description}
+                                focus={photoData?.focus?.length === 2 ? [photoData.focus[0], photoData.focus[1]] : undefined}
                                 currentIndex={currentIndex}
                                 onMediumLoaded={() => {
                                     setLoadStates(loadStates.set(index, true));
                                 }}
-                                style={
-                                    (() => {
-                                        /*
-                                        var width, height;
-                                        if (photoData.width / dimensions.width > photoData.height / dimensions.height) {
-                                            width = dimensions.width;
-                                            height = photoData.height * (dimensions.width / photoData.width);
-                                        } else {
-                                            height = dimensions.height;
-                                            width = photoData.width * (dimensions.height / photoData.height);
-                                        }
-
-                                        return {
-                                            width: width,
-                                            height: height,
-                                            marginLeft: Math.max(0, (dimensions.width - width) / 2),
-                                        };
-                                        */
-                                       return {
-                                            width: dimensions.width,
-                                            height: dimensions.height
-                                       }
-                                    })()
-                                }
-                                />
+                                style={{
+                                    width: dimensions.width,
+                                    height: dimensions.height
+                                }}
+                            />
                         </div>
                     ))
                 }
