@@ -587,6 +587,62 @@ def _get_contact_details(service,
     return result
 
 
+def _get_media_list(items: dict[str, DriveItemInfo],
+                    names: list[str],
+                    item_type: DriveItemType) -> list[dict]:
+    """
+    Get a list of media data (image or video) at the supplied path
+
+    :param items: the dict of items
+    :param names: the names in the path to the directory containing the media items
+    :param item_type: the type of item (image or video)
+
+    :return: the media data as a list
+    """
+    return [
+        {
+            'file_id': photo_info.item_id,
+            'name': photo_info.name,
+            'description': (photo_info.description or '').strip(),
+            **photo_info.metadata
+        }
+        for photo_info in [
+            items[item_id]
+            for item_id in _get_items_in_dir(items, names)
+        ]
+        if photo_info.item_type == item_type
+    ]
+
+
+def _get_quote_content(service,
+                       items: dict[str, DriveItemInfo]) -> list[dict]:
+    """
+    Gets the quote content
+
+    :param service: the service
+    :param items: the dict of items
+
+    :return: the quote contents as a list of dicts - one per quote
+    """
+
+    profile_photos = _get_media_list(items, ['home', 'profile_photos'], DriveItemType.IMAGE)
+
+    photos_dict = {
+        photo_data['name']: photo_data 
+        for photo_data in profile_photos
+    }
+
+    return [
+        {
+            'quote': quote,
+            'name': name,
+            'url': url,
+            'photo': photos_dict[image_name]
+        }
+        for quote, name, image_name, url in _download_sheet(service,
+                                                            _get_file_id(items, ['home', 'quotes']))
+    ]
+
 def _get_home_content(service,
                       items: dict[str, DriveItemInfo]) -> dict:
     """
@@ -604,14 +660,7 @@ def _get_home_content(service,
     result['introduction'] = _download_text(service,
                                             _get_file_id(items, ['home', 'introduction']))
 
-    result['quotes'] = [
-        {
-            'quote': quote,
-            'name': name
-        }
-        for quote, name in _download_sheet(service,
-                                           _get_file_id(items, ['home', 'quotes']))
-    ]
+    result['quotes'] = _get_quote_content(service, items)
 
     result['name_checks'] = [
         {
@@ -622,20 +671,7 @@ def _get_home_content(service,
                                          _get_file_id(items, ['home', 'name_checks']))
     ]
 
-    result['photos'] = [
-        {
-            'file_id': photo_info.item_id,
-            'name': photo_info.name,
-            'description': (photo_info.description or '').strip(),
-            **photo_info.metadata
-        }
-        for photo_info in [
-            items[item_id]
-            for item_id in _get_items_in_dir(items, ['home', 'images'])
-        ]
-        if photo_info.item_type == DriveItemType.IMAGE
-    ]
-
+    result['photos'] = _get_media_list(items, ['home', 'images'], DriveItemType.IMAGE)
     _add_focus_points(service, result['photos'])
 
     return result
@@ -664,21 +700,7 @@ def _get_portfolio_content(items: dict[str, DriveItemInfo]) -> dict:
         if not album_name:
             album_name = item.name
 
-        album_items = [
-            items[item_id]
-            for item_id in _get_items_in_dir(items, ['portfolio', item.name])
-        ]
-
-        photos[album_name] = [
-            {
-                'file_id': photo_info.item_id,
-                'name': photo_info.name,
-                'description': (photo_info.description or '').strip(),
-                **photo_info.metadata
-            }
-            for photo_info in album_items
-            if photo_info.item_type == DriveItemType.IMAGE
-        ]
+        photos[album_name] = _get_media_list(items, ['portfolio', item.name], DriveItemType.IMAGE)
 
     return {
         'photos': photos
@@ -693,24 +715,8 @@ def _get_video_content(items: dict[str, DriveItemInfo]) -> list:
 
     :return: the video page contents as a list
     """
-    video_items = [
-        items[item_id]
-        for item_id in _get_items_in_dir(items, ['video'])
-    ]
-
-    videos = [
-        {
-            'file_id': video_info.item_id,
-            'name': video_info.name,
-            'description': (video_info.description or '').strip(),
-            **video_info.metadata
-        }
-        for video_info in video_items
-        if video_info.item_type == DriveItemType.VIDEO
-    ]
-
     return {
-        'videos': videos
+        'videos': _get_media_list(items, ['video'], DriveItemType.VIDEO)
     }
 
 
@@ -835,6 +841,10 @@ def main():
     media += [
         media_item
         for media_item in home['photos']
+    ]
+    media += [
+        quote_data['photo']
+        for quote_data in home['quotes']
     ]
     media += [
         media_item

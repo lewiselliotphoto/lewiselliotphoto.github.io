@@ -15,11 +15,12 @@
     overflow-x: hidden;
     align-items: stretch;
     z-index: 1;
+    background-color: #313133;
 }
 
 .imageSlideshowSpacer {
     flex-shrink: 0;
-    transition-timing-function: cubic-bezier(1, -0.3, 0.5, 1.1);
+    transition-timing-function: cubic-bezier(1, 0, 0.5, 1) !important;
 }
 
 .imageSlideshowPhoto {

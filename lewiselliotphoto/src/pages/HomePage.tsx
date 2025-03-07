@@ -1,6 +1,9 @@
 import ImageSlideshow from "../components/ImageSlideshow";
+import LazyLoadImage from "../components/LazyLoadImage";
 
 import homeContent from "../content/home.json"
+
+import './home.css'
 
 const HomePage = () => {
 
@@ -18,67 +21,56 @@ const HomePage = () => {
         }}
       />
       <div
-        style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            marginTop: '50px',
-            marginLeft: '10px',
-            marginRight: '10px',
-        }}
+        className="homeContainer"
       >
         <div
-          style={{
-            maxWidth: '1000px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '50px'
-          }}
+          className="homeContainerInner"
         >
-          <div
-            style={{
-              fontSize: 'large',
-              border: '1px solid #313133',
-              borderLeft: 'none',
-              borderRight: 'none',
-              paddingTop: '50px',
-              paddingBottom: '50px',
-            }}
-          >
+          <hr/>
+          <p>
             {homeContent.introduction}
-          </div>
+          </p>
+          <hr/>
           <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              alignItems: 'stretch',
-              gap: '10px'
-            }}
+            className="reviewsContainer"
           >
             {homeContent.quotes.map((quote, quoteIndex) => (
               <div
-                key={`quote_${quoteIndex}`}
-                style={{
-                  padding: '10px',
-                  backgroundColor: 'rgba(49, 49, 51, 0.05)',
-                  // TODO use css and make this responsive
-                  width: '100%',
-                  maxWidth: '450px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
-                  justifyContent: 'center',
-                }}
+              key={`quote_${quoteIndex}`}
+              className="review"
               >
-                {quote.quote}
-                <sub>
-                  {quote.name}
-                </sub>
+                <a
+                  className="reviewHeader"
+                  href={quote.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <LazyLoadImage
+                    preview={`${quote.photo.file_id}.${quote.photo.extension}`}
+                    medium={`${quote.photo.file_id}.${quote.photo.extension}`}
+                    large={`${quote.photo.file_id}.${quote.photo.extension}`}
+                    description={quote.photo.description}
+                    style={{
+                        width: '50px',
+                        height: '50px',
+                        borderRadius: '50px',
+                        flexShrink: 0,
+                        filter: 'grayscale(100%)'
+                    }}
+                  />
+                  <div
+                    className="reviewName"
+                  >
+                    {quote.name}
+                  </div>
+                </a>
+                <div>
+                  {quote.quote}
+                </div>
               </div>
             ))}
           </div>
+          <hr/>
         </div>
       </div>
     </>
