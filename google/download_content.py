@@ -643,6 +643,34 @@ def _get_quote_content(service,
                                                             _get_file_id(items, ['home', 'quotes']))
     ]
 
+def _get_name_check_content(service,
+                            items: dict[str, DriveItemInfo]) -> list[dict]:
+    """
+    Gets the name check content
+
+    :param service: the service
+    :param items: the dict of items
+
+    :return: the name check contents as a list of dicts - one per name check
+    """
+
+    logos = _get_media_list(items, ['home', 'logos'], DriveItemType.IMAGE)
+
+    photos_dict = {
+        photo_data['name']: photo_data 
+        for photo_data in logos
+    }
+
+    return [
+        {
+            'name': name,
+            'url': url,
+            'photo': photos_dict[image_name]
+        }
+        for name, url, image_name in _download_sheet(service,
+                                                     _get_file_id(items, ['home', 'name_checks']))
+    ]
+
 def _get_home_content(service,
                       items: dict[str, DriveItemInfo]) -> dict:
     """
@@ -661,16 +689,7 @@ def _get_home_content(service,
                                             _get_file_id(items, ['home', 'introduction']))
 
     result['quotes'] = _get_quote_content(service, items)
-
-    result['name_checks'] = [
-        {
-            'name': name,
-            'url': url
-        }
-        for name, url in _download_sheet(service,
-                                         _get_file_id(items, ['home', 'name_checks']))
-    ]
-
+    result['name_checks'] = _get_name_check_content(service, items)
     result['photos'] = _get_media_list(items, ['home', 'images'], DriveItemType.IMAGE)
     _add_focus_points(service, result['photos'])
 
@@ -845,6 +864,10 @@ def main():
     media += [
         quote_data['photo']
         for quote_data in home['quotes']
+    ]
+    media += [
+        name_check_data['photo']
+        for name_check_data in home['name_checks']
     ]
     media += [
         media_item

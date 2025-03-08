@@ -105,8 +105,8 @@ const LazyLoadImage = (
             const windowHeight = window.innerHeight || document.documentElement.clientHeight;
             const windowWidth = window.innerWidth || document.documentElement.clientWidth;
             setInViewport(
-                boundingRect.top >= -2*dimensions.width - loadMargin &&
-                boundingRect.left >= -2*dimensions.height - loadMargin &&
+                boundingRect.top >= -2*dimensions.height - loadMargin &&
+                boundingRect.left >= -2*dimensions.width - loadMargin &&
                 boundingRect.bottom <= windowHeight + 2*dimensions.height + loadMargin &&
                 boundingRect.right <= windowWidth + 2*dimensions.width + loadMargin
             );

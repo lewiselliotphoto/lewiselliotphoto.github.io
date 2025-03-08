@@ -1,0 +1,20 @@
+@keyframes wipe-enter {
+	0% {
+		transform: scale(0);
+        opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+        opacity: 1;
+	}
+}
+
+.notInViewport {
+    opacity: 0;
+}
+
+.inViewport {
+    animation-name: wipe-enter;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
