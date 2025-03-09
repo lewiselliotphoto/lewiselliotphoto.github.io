@@ -155,7 +155,7 @@ const NavBar = () => {
                 id="navMenu"
                 className={menuOpen ? "open" : ""}
                 style={{
-                    zIndex: 1000
+                    zIndex: 1999
                 }}
             >
                 <div

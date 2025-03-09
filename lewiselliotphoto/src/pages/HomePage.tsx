@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import AnimateOnScroll from "../components/AnimateOnScroll";
 import ImageSlideshow from "../components/ImageSlideshow";
 import LazyLoadImage from "../components/LazyLoadImage";
+import Footer from "../components/Footer";
 
 import homeContent from "../content/home.json"
 
@@ -77,10 +78,16 @@ const HomePage = () => {
         >
           <hr/>
           <div ref={ref}></div>
+          <h2>
+            About me
+          </h2>
           <p>
             {homeContent.introduction}
           </p>
           <hr/>
+          <h2>
+            Reviews
+          </h2>
           <div
             className="reviewsContainer"
           >
@@ -160,6 +167,7 @@ const HomePage = () => {
           <hr/>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
