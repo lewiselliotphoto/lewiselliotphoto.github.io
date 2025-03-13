@@ -15,7 +15,8 @@ const HomePage = () => {
 
   const [showScrollHint, setShowScrollHint] = useState<boolean>(true);
   const [scrollHintDismissed, setScrollHintDismissed] = useState<boolean>(false);
-    
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  
   // Set visibility state of scroll hint
   useEffect(() => {
 
@@ -55,6 +56,8 @@ const HomePage = () => {
         images={homeContent.photos}
         autoScroll={true}
         hasControls={false}
+        currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
         style={{
             width: '100%',
             height: 'calc(100vh - 100px)',

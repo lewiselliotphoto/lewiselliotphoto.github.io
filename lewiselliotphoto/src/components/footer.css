@@ -1,15 +1,16 @@
 .contactDetailsFooter {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
-    min-height: 200px;
     background-color: #313133;
     color: white;
     margin-bottom: 0;
-    padding-bottom: 50px;
+}
+
+.contactDetailsFooter>* {
+    margin-top: 20px;
 }
 
 .contactDetailsFooter>a:link {
@@ -42,14 +43,15 @@
 
 .copiedTextIndicator {
     position: fixed;
-    right: 10px;
+    margin: 0;
+    right: 0;
     padding: 10px;
     width: calc(100% - 40px);
     max-width: 500px;
     max-height: 50px;
     background-color: #4f4f51;
     color: white;
-    transition: bottom 0.2s;
+    transition: top 0.2s;
     text-align: center;
     z-index: 1000;
 }
@@ -70,8 +72,9 @@
 }
 
 .copyright {
-    margin-top: 50px;
     text-align: center;
+    margin-top: 60px;
+    margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 500px) {

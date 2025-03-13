@@ -1,6 +1,6 @@
 @keyframes wipe-enter {
 	0% {
-		transform: scale(0);
+		transform: scale(0.95) translateY(10px);
         opacity: 0;
 	}
 	100% {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 
 import LazyLoadImage from "./LazyLoadImage";
 import ImageData from "./imageData";
@@ -10,6 +10,8 @@ interface ImageGalleryProps {
     hasControls: boolean; ///< Whether to allow the user to control the slideshow
     autoScroll: boolean; ///< Whether to automatically scroll through the pictures
     style: object; ///< Custom styling parameters
+    currentIndex: number; ///< The current index of the image being shown
+    setCurrentIndex: Dispatch<SetStateAction<number>>; ///< Function to set the current index 
 }
 
 const ImageSlideshow = (
@@ -17,7 +19,9 @@ const ImageSlideshow = (
         images,
         hasControls,
         autoScroll,
-        style
+        style,
+        currentIndex,
+        setCurrentIndex
     }: ImageGalleryProps
 ) => {
    
@@ -31,7 +35,6 @@ const ImageSlideshow = (
     });
 
 
-    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [loadStates, setLoadStates] = useState<Map<number, boolean>>(new Map());
     const [lastChangeTime, setLastChangeTime] = useState<number>((new Date()).getTime())
 
@@ -115,7 +118,7 @@ const ImageSlideshow = (
         return () => {
             clearInterval(interval);
         };
-    }, [autoScroll, currentIndex, images.length, loadStates, lastChangeTime, getNextIndex]);
+    }, [autoScroll, currentIndex, images.length, loadStates, lastChangeTime, getNextIndex, setCurrentIndex]);
 
     return (
         <div

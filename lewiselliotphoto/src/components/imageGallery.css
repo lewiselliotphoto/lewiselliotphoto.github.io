@@ -1,5 +1,5 @@
 :root {
-    --image-gallery-gap: 5px;
+    --image-gallery-gap: 10px;
 }
 
 .imageGallery {
@@ -13,6 +13,7 @@
 
 .imageGalleryPhoto {
     width: calc(50% - 0.5 * var(--image-gallery-gap));
+    cursor: pointer;
 }
 
 .imageGalleryDescription {
@@ -21,6 +22,20 @@
     margin-bottom: 20px;
     font-style: italic;
     text-align: center;
+}
+
+.imageGalleryCloseButton {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    background-image: url('../staticContent/close.svg');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    z-index: 10000;
 }
 
 

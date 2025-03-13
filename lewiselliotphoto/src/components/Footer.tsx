@@ -69,7 +69,7 @@ const Footer = () => {
             <div
                 className='copiedTextIndicator'
                 style={{
-                    bottom: copyIndicatorOpen ? '10px' : '-100px'
+                    top: copyIndicatorOpen ? '0px' : '-100px'
                 }}
             >
                 Copied {copiedText}

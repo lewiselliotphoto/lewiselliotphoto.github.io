@@ -10,7 +10,7 @@ interface AnimateOnScrollProps {
 
 const AnimateOnScroll = ({
     children,
-    classes,
+    classes = [],
     style
 }: AnimateOnScrollProps) => {
     

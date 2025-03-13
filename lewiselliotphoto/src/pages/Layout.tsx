@@ -12,14 +12,10 @@ const Layout = () => {
                 id="mainContent"
             >
                 <div
-                    id="mainContentContainer"
+                    id="navBarPlaceholder"
                 >
-                    <div
-                        id="navBarPlaceholder"
-                    >
-                    </div>
-                    <Outlet />
                 </div>
+                <Outlet />
             </div>
         </>
     );
